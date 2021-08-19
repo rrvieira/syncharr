@@ -1,0 +1,6 @@
+[DEFAULT]
+DB_POLLING_TIME_SECONDS=300
+DATABASE=/syncharr-data/syncharr.sqlite
+LOG_PATH=/syncharr-data/syncharr.log.txt
+DATABASE_SCHEMA=/syncharr/schema.sql
+SUBSYNC_BIN_PATH=/usr/local/bin/subsync
