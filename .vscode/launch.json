@@ -1,21 +1,27 @@
 {
-    "version": "0.2.0",
+    "version": "0.2.1",
     "configurations": [
         {
-            "name": "Python: Daemon",
+            "name": "Syncharr: Daemon",
+            "type": "python",
+            "request": "launch",
+            "module": "syncharrd"
+        },
+        {
+            "name": "Daemon",
             "type": "python",
             "request": "launch",
             "module": "daemon"
         },
         {
-            "name": "Python: Setup",
+            "name": "Setup",
             "type": "python",
             "request": "launch",
             "program": "./setup.py",
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Flask",
+            "name": "Webapp",
             "type": "python",
             "request": "launch",
             "module": "flask",
@@ -30,7 +36,7 @@
             "jinja": true
         },
         {
-            "name": "Docker: Python - Flask",
+            "name": "Docker",
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run: debug",
