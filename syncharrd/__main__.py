@@ -1,27 +1,32 @@
-import socketserver
-import signal
-import threading
+import logging
+import sys
 
-from . import LOGGER, SYNC_WORKER_THREAD_EVENT
-from .http_request_handler import HttpRequestHandler
-from .sync_worker_thread import sync_worker_thread
+from config import CONFIG
+from .http_request_handler import launch_http_server
+from .sync_worker_thread import launch_worker_thread
 
 
 def main():
-    LOGGER.info("--- App launched ---")
-    launch_worker_thread()
-    launch_http_server()
+    logger = setup_logger()
+    config = setup_config()
+
+    logger.info("--- App launched ---")
+
+    worker_thread = launch_worker_thread(logger, config)
+    launch_http_server(worker_thread, logger, config)
 
 
-def launch_http_server():
-    httpd = socketserver.TCPServer(('', 6766), HttpRequestHandler)
-    # httpd = HTTPServer(server_address, HttpRequestHandler)
-    httpd.serve_forever()
+def setup_logger():
+    logging.basicConfig(filename=CONFIG.log_path, format='%(asctime)s %(message)s')
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    # TODO - remove
+    logger.addHandler(logging.StreamHandler(sys.stdout))
+    return logger
 
 
-def launch_worker_thread():
-    worker = threading.Thread(target=sync_worker_thread, args=(SYNC_WORKER_THREAD_EVENT,), daemon=True)
-    worker.start()
+def setup_config():
+    return CONFIG
 
 
 if __name__ == '__main__':

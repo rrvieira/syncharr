@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS pending_synch_subs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  subPath TEXT UNIQUE NOT NULL,
-  mediaPath TEXT NOT NULL,
-  synchedSubPath TEXT UNIQUE NOT NULL
+  sub_path TEXT UNIQUE NOT NULL,
+  media_path TEXT NOT NULL,
+  synched_sub_path TEXT UNIQUE NOT NULL
 );

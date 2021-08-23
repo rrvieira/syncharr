@@ -1,43 +1,41 @@
 import sqlite3
 import threading
 
-from config import CONFIG
-from . import LOGGER
-
 
 class PendingSyncRequest:
-    def __init__(self, id, subPath, mediaPath, synchedSubPath):
-        self.id = id
-        self.subPath = subPath
-        self.mediaPath = mediaPath
-        self.synchedSubPath = synchedSubPath
+    def __init__(self, request_id, sub_path, media_path, synched_sub_path):
+        self.request_id = request_id
+        self.sub_path = sub_path
+        self.media_path = media_path
+        self.synched_sub_path = synched_sub_path
 
 
 class PendingSyncDB:
-    def __init__(self, database_path, database_schema_path):
+    def __init__(self, database_path, database_schema_path, logger):
         self.db = None
         self.databasePath = database_path
         self.database_schema_path = database_schema_path
+        self.logger = logger
         self.init_db()
 
-    def insert_sync_request(self, subPath, mediaPath, synchedSubPath):
+    def insert_sync_request(self, sub_path, media_path, synched_sub_path):
         self.init_db()
         try:
             self.db.execute(
-                "INSERT INTO pending_synch_subs (subPath, mediaPath, synchedSubPath) VALUES (?, ?, ?)",
-                (subPath, mediaPath, synchedSubPath),
+                "INSERT INTO pending_synch_subs (sub_path, media_path, synched_sub_path) VALUES (?, ?, ?)",
+                (sub_path, media_path, synched_sub_path),
             )
             self.db.commit()
             return True
         except self.db.IntegrityError:
-            LOGGER.error(f"Request for: '{subPath}' already registered.")
+            self.logger.error(f"Request for: '{sub_path}' already registered.")
             return False
 
-    def delete_pending_sync(self, id):
+    def delete_pending_sync(self, request_id):
         self.init_db()
         self.db.execute(
             "DELETE FROM pending_synch_subs WHERE id=?",
-            (id,),
+            (request_id,),
         )
         self.db.commit()
 
@@ -57,10 +55,10 @@ class PendingSyncDB:
             db.commit()
 
             self.db = db
-            LOGGER.debug("Database connection initialized in thread: {}".format(threading.get_ident()))
+            self.logger.debug("Database connection initialized in thread: {}".format(threading.current_thread().name))
 
     def close_db(self):
         if self.db is not None:
             self.db.close()
             self.db = None
-            LOGGER.debug("Database connection closed in thread: {}".format(threading.get_ident()))
+            self.logger.debug("Database connection closed in thread: {}".format(threading.current_thread().name))
