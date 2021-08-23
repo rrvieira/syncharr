@@ -29,4 +29,4 @@ def home():
 
 @app.route("/sync-request/log")
 def get_data():
-    return send_file(config.syncharrConfig.logPath)
+    return send_file(config.CONFIG.log_path)

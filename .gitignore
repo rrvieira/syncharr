@@ -16,4 +16,6 @@ dist/
 build/
 *.egg-info/
 
+.idea/
+
 *.ini

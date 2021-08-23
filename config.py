@@ -1,18 +1,18 @@
 import configparser
 
+
 class SyncharrConfig:
-    def __init__(self, databasePath, databaseSchema, databasePollingTime, logPath, subsyncBinPath):
-        self.databasePath = databasePath
-        self.databaseSchema = databaseSchema
-        self.databasePollingTime = int(databasePollingTime)
-        self.logPath = logPath
-        self.subsyncBinPath = subsyncBinPath
+    def __init__(self, database_path, database_schema, log_path, subsync_bin_path):
+        self.database_path = database_path
+        self.database_schema = database_schema
+        self.log_path = log_path
+        self.subsync_bin_path = subsync_bin_path
 
-config = configparser.ConfigParser()
-config.read('syncharr.ini')
 
-syncharrConfig = SyncharrConfig(    config['DEFAULT']['DATABASE'],
-                                    config['DEFAULT']['DATABASE_SCHEMA'],
-                                    config['DEFAULT']['DB_POLLING_TIME_SECONDS'],
-                                    config['DEFAULT']['LOG_PATH'],
-                                    config['DEFAULT']['SUBSYNC_BIN_PATH'])
+config_parser = configparser.ConfigParser()
+config_parser.read('syncharr.ini')
+
+CONFIG = SyncharrConfig(config_parser['DEFAULT']['DATABASE'],
+                        config_parser['DEFAULT']['DATABASE_SCHEMA'],
+                        config_parser['DEFAULT']['LOG_PATH'],
+                        config_parser['DEFAULT']['SUBSYNC_BIN_PATH'])

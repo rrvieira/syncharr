@@ -1,20 +1,28 @@
-import logging
-from . import db
+import socketserver
 import signal
-import subprocess
-import sys
+import threading
 
-import config
+from . import LOGGER, SYNC_WORKER_THREAD_EVENT
+from .http_request_handler import HttpRequestHandler
+from .sync_worker_thread import sync_worker_thread
 
-logging.basicConfig(filename=config.syncharrConfig.logPath, 
-					format='%(asctime)s %(message)s') 
-logger=logging.getLogger()
-logger.setLevel(logging.DEBUG)
-
-pSyncDB = db.PendingSyncDB(config.syncharrConfig.databasePath)
 
 def main():
-    return
+    LOGGER.info("--- App launched ---")
+    launch_worker_thread()
+    launch_http_server()
+
+
+def launch_http_server():
+    httpd = socketserver.TCPServer(('', 6766), HttpRequestHandler)
+    # httpd = HTTPServer(server_address, HttpRequestHandler)
+    httpd.serve_forever()
+
+
+def launch_worker_thread():
+    worker = threading.Thread(target=sync_worker_thread, args=(SYNC_WORKER_THREAD_EVENT,), daemon=True)
+    worker.start()
+
 
 if __name__ == '__main__':
     main()
