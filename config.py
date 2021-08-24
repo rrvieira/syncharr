@@ -18,6 +18,11 @@ class EnvironmentUserSettings:
         self.telegram_chat_id = telegram_chat_id
 
 
+class EnvironmentProjSettings:
+    def __init__(self, log_console_enabled):
+        self.log_console_enabled = log_console_enabled
+
+
 config_parser = configparser.ConfigParser()
 config_parser.read('syncharr.ini')
 
@@ -30,3 +35,5 @@ ENV_USER_SETTINGS = EnvironmentUserSettings(os.environ.get('SYNC_WINDOW_SIZE_SET
                                             os.environ.get('SYNC_VERBOSE_SETTING', 2),
                                             os.environ.get('TELEGRAM_USER_TOKEN'),
                                             os.environ.get('TELEGRAM_CHAT_ID'))
+
+ENV_PROJ_SETTINGS = EnvironmentProjSettings(bool(os.environ.get('LOG_CONSOLE_ENABLED', False)))

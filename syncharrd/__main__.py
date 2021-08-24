@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from config import CONFIG, ENV_USER_SETTINGS
+from config import CONFIG, ENV_USER_SETTINGS, ENV_PROJ_SETTINGS
 from .http_request_handler import launch_http_server
 from .sync_worker_thread import launch_worker_thread
 
@@ -21,7 +21,9 @@ def setup_logger():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    # logger.addHandler(logging.StreamHandler(sys.stdout))
+    if ENV_PROJ_SETTINGS.log_console_enabled:
+        logger.addHandler(logging.StreamHandler(sys.stdout))
+
     return logger
 
 
