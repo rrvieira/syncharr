@@ -5,6 +5,7 @@ from os import path
 from urllib.parse import parse_qs
 
 from .db import PendingSyncDB
+from .sync_request_validator import is_valid_add_sync_request
 
 
 def launch_http_server(worker_thread, logger, config):
@@ -33,20 +34,14 @@ def http_request_handler(worker_thread, logger, config):
                 logger.info("New sync request | sub='{sub}' media='{media}' synchedSub='{synchedSub}'"
                             .format(sub=sub_file_path, media=media_file_path, synchedSub=synched_sub_file_path))
 
-                if not sub_file_path:
-                    self.__send_missing_query_param_error("sub")
-                elif not media_file_path:
-                    self.__send_missing_query_param_error("media")
-                elif not synched_sub_file_path:
-                    self.__send_missing_query_param_error("synchedSub")
-                elif not path.exists(str(sub_file_path)):
-                    logger.error("Sub file does not exist: '{}'".format(str(sub_file_path)))
-                    self.__send_no_content_response(HTTPStatus.BAD_REQUEST)
-                elif not path.exists(str(media_file_path)):
-                    logger.error("Media file does not exist:  '{}'".format(str(media_file_path)))
-                    self.__send_no_content_response(HTTPStatus.BAD_REQUEST)
-                else:
+                is_valid_request, http_status_code, message = is_valid_add_sync_request(sub_file_path,
+                                                                                        media_file_path,
+                                                                                        synched_sub_file_path)
+                if is_valid_request:
                     self.__accept_sync_request(sub_file_path, media_file_path, synched_sub_file_path)
+                else:
+                    logger.error(message)
+                    self.__send_sync_request_error(http_status_code, message)
             else:
                 self.__send_no_content_response(HTTPStatus.NOT_FOUND)
 
@@ -61,8 +56,8 @@ def http_request_handler(worker_thread, logger, config):
             self.send_response(http_status)
             self.end_headers()
 
-        def __send_missing_query_param_error(self, param_name):
-            logger.error("Missing query parm: '{}'".format(param_name))
-            self.__send_no_content_response(HTTPStatus.BAD_REQUEST)
+        def __send_sync_request_error(self, http_status_code, message):
+            logger.error(message)
+            self.__send_no_content_response(http_status_code)
 
     return HttpRequestHandler

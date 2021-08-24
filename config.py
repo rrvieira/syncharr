@@ -1,4 +1,5 @@
 import configparser
+import os
 
 
 class SyncharrConfig:
@@ -9,6 +10,14 @@ class SyncharrConfig:
         self.subsync_bin_path = subsync_bin_path
 
 
+class EnvironmentUserSettings:
+    def __init__(self, sync_window_size_setting, sync_verbose_setting, telegram_user_token, telegram_chat_id):
+        self.sync_window_size_setting = sync_window_size_setting
+        self.sync_verbose_setting = sync_verbose_setting
+        self.telegram_user_token = telegram_user_token
+        self.telegram_chat_id = telegram_chat_id
+
+
 config_parser = configparser.ConfigParser()
 config_parser.read('syncharr.ini')
 
@@ -16,3 +25,8 @@ CONFIG = SyncharrConfig(config_parser['DEFAULT']['DATABASE'],
                         config_parser['DEFAULT']['DATABASE_SCHEMA'],
                         config_parser['DEFAULT']['LOG_PATH'],
                         config_parser['DEFAULT']['SUBSYNC_BIN_PATH'])
+
+ENV_USER_SETTINGS = EnvironmentUserSettings(os.environ.get('SYNC_WINDOW_SIZE_SETTING', 120),
+                                            os.environ.get('SYNC_VERBOSE_SETTING', 2),
+                                            os.environ.get('TELEGRAM_USER_TOKEN'),
+                                            os.environ.get('TELEGRAM_CHAT_ID'))
