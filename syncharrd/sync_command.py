@@ -107,7 +107,7 @@ class SyncResult:
         return self.sync_request.sub_path
 
     def sub_language(self):
-        regex = r"(?<=\.)(.*?)(?=\.srt$)"
+        regex = r"(?<=\.)([^.]+?)(?=\.srt$)"
         matches = re.findall(regex, self.sync_request.sub_path)
 
         if len(matches) == 1:

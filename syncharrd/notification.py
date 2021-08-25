@@ -5,8 +5,10 @@ class TelegramNotification:
     __MESSAGE_TEMPLATE = """<b>Syncharr - Sync Finished</b>
 {time_consumed}
 
+<b>Reference:</b> <code>{sync_type}</code>, <code>{ref_lang}</code>
+
 <b>Success:</b> <code>{success}</code>
-<b>for ref language:</b> <code>{language}</code>
+<b>for sub:</b> <code>{sub}</code>
 <b>and media:</b>
 <code>{media}</code>
     """
@@ -39,11 +41,13 @@ class TelegramNotification:
         self.logger.info("Telegram notification sent to user:\n{}".format(msg))
 
     def __build_message(self, sync_result):
-        ref_lang = sync_result.sub_language()
-        if ref_lang is None:
-            ref_lang = sync_result.original_sub_file_path()
+        sub_lang = sync_result.sub_language()
+        if sub_lang is None:
+            sub_lang = sync_result.original_sub_file_path()
 
         return self.__MESSAGE_TEMPLATE.format(time_consumed=str(sync_result.time_consumed),
+                                              sync_type=sync_result.ref_type,
+                                              ref_lang=sync_result.ref_lang,
                                               success=str(sync_result.success),
-                                              language=ref_lang,
+                                              sub=sub_lang,
                                               media=sync_result.media_file_path())

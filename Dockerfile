@@ -22,7 +22,6 @@ RUN pip3 install -r requirements.txt
 RUN python3 setup.py build
 RUN python3 setup.py install
 
-# Install pip requirements
 WORKDIR /syncharr
 
 COPY requirements.txt .
@@ -31,4 +30,4 @@ RUN python -m pip install -r requirements.txt
 COPY . /syncharr
 RUN mv /syncharr/syncharr.ini.docker /syncharr/syncharr.ini
 
-CMD ["./run.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:6766", "webapp.webapp:app"]

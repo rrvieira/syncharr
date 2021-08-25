@@ -23,7 +23,5 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-data/
-media-test/
 syncharr.ini
 README.md
