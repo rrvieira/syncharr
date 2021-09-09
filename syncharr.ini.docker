@@ -2,4 +2,5 @@
 DATABASE=/syncharr-data/syncharr.sqlite
 LOG_PATH=/syncharr-data/syncharr.log.txt
 DATABASE_SCHEMA=/syncharr/schema.sql
-SUBSYNC_BIN_PATH=/usr/local/bin/subsync
+SUBSYNC_BIN_PATH=/subsync/bin/subsync
+FFSUBSYNC_BIN_PATH=/usr/local/bin/ffsubsync

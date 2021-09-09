@@ -30,4 +30,6 @@ RUN python -m pip install -r requirements.txt
 COPY . /syncharr
 RUN mv /syncharr/syncharr.ini.docker /syncharr/syncharr.ini
 
-CMD ["gunicorn", "--bind", "0.0.0.0:6766", "webapp.webapp:app"]
+ENV COLUMNS='640'
+
+CMD ["gunicorn", "--bind", "0.0.0.0:6766", "webapp.webapp:app", "--timeout 90"]

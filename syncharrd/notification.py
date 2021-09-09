@@ -2,16 +2,16 @@ import telegram
 
 
 class TelegramNotification:
-    __MESSAGE_TEMPLATE = """<b>Syncharr - Sync Finished</b>
-{time_consumed}
+    __MESSAGE_TITLE = """<b>Syncharr - Sync Finished</b>
+Media: <code>{media}</code>
+Sub: <code>{sub}</code>"""
 
-<b>Reference:</b> <code>{sync_type}</code>, <code>{ref_lang}</code>
+    __MESSAGE_RESULT_TEMPLATE = """
 
-<b>Success:</b> <code>{success}</code>
-<b>for sub:</b> <code>{sub}</code>
-<b>and media:</b>
-<code>{media}</code>
-    """
+Sync by: <code>{tool_name}</code>
+Reference: <code>{reference}</code>
+Time taken: <code>{time_consumed}s</code>
+Success: <code>{success}</code>"""
 
     def __init__(self, telegram_user_token, telegram_chat_id, logger):
         self.telegram_user_token = telegram_user_token
@@ -31,23 +31,28 @@ class TelegramNotification:
             self.telegram_bot = None
             self.logger.warning("Telegram bot not initialized. Telegram chat id not provided")
 
-    def notify(self, sync_result):
+    def notify(self, sync_executor_result):
         if self.telegram_bot is None:
             self.logger.warning("Notification to telegram not triggered. Telegram bot is none.")
             return
 
-        msg = self.__build_message(sync_result)
+        msg = self.__build_message(sync_executor_result)
         self.telegram_bot.sendMessage(chat_id=self.telegram_chat_id, text=msg, parse_mode=telegram.ParseMode.HTML)
         self.logger.info("Telegram notification sent to user:\n{}".format(msg))
 
-    def __build_message(self, sync_result):
-        sub_lang = sync_result.sub_language()
+    def __build_message(self, sync_executor_result):
+        sub_lang = sync_executor_result.sub_language()
         if sub_lang is None:
-            sub_lang = sync_result.original_sub_file_path()
+            sub_lang = sync_executor_result.original_sub_file_path()
 
-        return self.__MESSAGE_TEMPLATE.format(time_consumed=str(sync_result.time_consumed),
-                                              sync_type=sync_result.ref_type,
-                                              ref_lang=sync_result.ref_lang,
-                                              success=str(sync_result.success),
-                                              sub=sub_lang,
-                                              media=sync_result.media_file_path())
+        message = self.__MESSAGE_TITLE.format(media=sync_executor_result.media_file_path(),
+                                              sub=sub_lang)
+
+        for sync_result in sync_executor_result.sync_result_list:
+
+            message += self.__MESSAGE_RESULT_TEMPLATE.format(tool_name=sync_result.sync_by_name,
+                                                             reference=sync_result.reference(),
+                                                             time_consumed=str(sync_result.time_consumed),
+                                                             success=str(sync_result.was_success()))
+
+        return message
