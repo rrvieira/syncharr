@@ -9,26 +9,18 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pip3 install pocketsphinx
-
+RUN pip3 install pocketsphinx ffsubsync==0.4.16
 RUN git clone -b '0.16' https://github.com/sc0ty/subsync.git
 
 WORKDIR /subsync
-
 RUN cp subsync/config.py.template subsync/config.py
-RUN sed -i '/wxPython==4.0.6/d' ./requirements.txt
-RUN pip3 install -r requirements.txt
-
-RUN python3 setup.py build
-RUN python3 setup.py install
-
-WORKDIR /syncharr
-
-COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+RUN mkdir -p /root/.config/subsync/
+RUN pip3 install .
 
 COPY . /syncharr
-RUN mv /syncharr/syncharr.ini.docker /syncharr/syncharr.ini
+WORKDIR /syncharr
+RUN pip3 install -r requirements.txt
+RUN mv syncharr.ini.docker syncharr.ini
 
 ENV COLUMNS='640'
 
