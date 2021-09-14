@@ -2,7 +2,7 @@ import telegram
 
 
 class TelegramNotification:
-    __MESSAGE_TITLE = """<b>Syncharr - Sync Finished</b>
+    __MESSAGE_TITLE = """<b>Syncharr - Sync {sync_result}</b>
 Media: <code>{media}</code>
 Sub: <code>{sub}</code>"""
 
@@ -45,14 +45,30 @@ Success: <code>{success}</code>"""
         if sub_lang is None:
             sub_lang = sync_executor_result.original_sub_file_path()
 
-        message = self.__MESSAGE_TITLE.format(media=sync_executor_result.media_file_path(),
-                                              sub=sub_lang)
+        message = self.__MESSAGE_TITLE.format(
+            sync_result=self.__get_sync_executor_result_text(sync_executor_result.was_success()),
+            media=sync_executor_result.media_file_path(),
+            sub=sub_lang)
 
         for sync_result in sync_executor_result.sync_result_list:
-
-            message += self.__MESSAGE_RESULT_TEMPLATE.format(tool_name=sync_result.sync_by_name,
-                                                             reference=sync_result.reference(),
-                                                             time_consumed=str(sync_result.time_consumed),
-                                                             success=str(sync_result.was_success()))
+            message += self.__MESSAGE_RESULT_TEMPLATE.format(
+                tool_name=sync_result.sync_by_name,
+                reference=sync_result.reference(),
+                time_consumed=str(sync_result.time_consumed),
+                success=str(self.__get_sync_result_emoji(sync_result.was_success())))
 
         return message
+
+    @staticmethod
+    def __get_sync_executor_result_text(was_success):
+        if was_success:
+            return "Success 🟢"
+        else:
+            return "Failed 🔴"
+
+    @staticmethod
+    def __get_sync_result_emoji(was_success):
+        if was_success:
+            return "✅"
+        else:
+            return "❌"

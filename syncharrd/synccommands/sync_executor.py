@@ -64,9 +64,9 @@ class SyncExecutorResult:
 
     def was_success(self):
         for sync_result in self.sync_result_list:
-            if not sync_result.was_success():
-                return False
-        return True
+            if sync_result.was_success():
+                return True
+        return False
 
     def media_file_path(self):
         return self.sync_request.media_path
