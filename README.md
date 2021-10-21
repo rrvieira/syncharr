@@ -39,7 +39,7 @@ Also, syncharr was implemented in a standalone docker image instead of bundling 
 
 Here are some example snippets to show how one can get started creating a container.
 
-## Create and launch container
+## Starting the container
 
 ### docker-compose
 
