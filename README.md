@@ -11,7 +11,7 @@ Currently the following external synch tools are supported:
 And for the delivery of notifications:
 - [Telegram](https://telegram.org/)
 
-## Motivation
+## Goal
 
 syncharr was implemented with the idea of being integrated and used together with [morpheus65535/bazarr](https://github.com/morpheus65535/bazarr). Bazarr already provides an embedded automatic synchronization tool but has some limitations. 
 
@@ -23,17 +23,19 @@ Some highlights of synchar:
 
 Also, syncharr was implemented in a standalone docker image instead of bundling bazarr:
 - to allow to receive bazarr container updates as soon as they are available;
-- to easy integrate it in other environments;
+- to easily integrate it in other environments/other tools;
 - to be able to specify a docker cpu throttle just for syncharr container - as subtitle synchronization can be a heavy task at times.
 
-**Notice**: syncharr is hosted by the Python WSGI HTTP Server: Gunicorn. It is not behind any HTTP proxy server, so its use outside of a local network of your trust is not advised.
+**Notice**: syncharr is hosted by the Python WSGI HTTP Server: [Gunicorn](https://gunicorn.org/). It is not behind any HTTP proxy server, so its use outside of a local network of your trust is not advised.
 
-## Synch Result Notification - Samples
+## Synch Result Notification - Demo
 
 ### Telegram
 
-<img src="https://i.imgur.com/nfKPPOU.png" width=50% height=50%> | <img src="https://i.imgur.com/OVN9D5w.png" width=50% height=50%>
------------- | -------------
+<p float="left">
+  <img width=310 src="https://i.imgur.com/nfKPPOU.png">
+  <img width=310 src="https://i.imgur.com/OVN9D5w.png">
+</p>
 
 # Usage
 
