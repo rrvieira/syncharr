@@ -8,8 +8,8 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pip3 install pocketsphinx ffsubsync==0.4.16
-RUN git clone -b '0.16' https://github.com/sc0ty/subsync.git
+RUN pip3 install pocketsphinx ffsubsync==0.4.23
+RUN git clone -b '0.17' https://github.com/sc0ty/subsync.git
 
 WORKDIR /subsync
 RUN cp subsync/config.py.template subsync/config.py

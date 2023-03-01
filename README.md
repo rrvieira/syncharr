@@ -99,13 +99,13 @@ docker run -d \
 
 ### Parameters
 
-Name | Is Optional? | Default | Description
------------- | ------------- | ------------- | -------------
-SYNC_TOOLS | Yes | `["sc0ty/subsync", "smacke/ffsubsync"]` | Ordered list with the IDs of the external tools that will be used to try to synchronize subtitles. Current supported tools -> name: [sc0ty/subsync](https://github.com/sc0ty/subsync), id: `sc0ty/subsync`; name: [smacke/ffsubsync](https://github.com/smacke/ffsubsync), id: `smacke/ffsubsync`.
-SYNC_WINDOW_SIZE_SETTING | Yes | `120`| Max subtitle synch correction (in seconds)
-SYNC_VERBOSE_SETTING | Yes | `2` | Verbosity level (0 - 3), higher number means more data will be printed
-TELEGRAM_USER_TOKEN | Yes | | Your telegram user token. If none, no notification is sent
-TELEGRAM_CHAT_ID | Yes | | Your telegram chat id. If none, no notification is sent
+| Name                     | Is Optional? | Default                                 | Description                                                                                                                                                                                                                                                                                        |
+|--------------------------|--------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| SYNC_TOOLS               | Yes          | `["sc0ty/subsync", "smacke/ffsubsync"]` | Ordered list with the IDs of the external tools that will be used to try to synchronize subtitles. Current supported tools -> name: [sc0ty/subsync](https://github.com/sc0ty/subsync), id: `sc0ty/subsync`; name: [smacke/ffsubsync](https://github.com/smacke/ffsubsync), id: `smacke/ffsubsync`. |
+| SYNC_WINDOW_SIZE_SETTING | Yes          | `120`                                   | Max subtitle synch correction (in seconds)                                                                                                                                                                                                                                                         |
+| SYNC_VERBOSE_SETTING     | Yes          | `2`                                     | Verbosity level (0 - 3), higher number means more data will be printed                                                                                                                                                                                                                             |
+| TELEGRAM_USER_TOKEN      | Yes          |                                         | Your telegram user token. If none, no notification is sent                                                                                                                                                                                                                                         |
+| TELEGRAM_CHAT_ID         | Yes          |                                         | Your telegram chat id. If none, no notification is sent                                                                                                                                                                                                                                            |
 
 ## REST API
 
@@ -130,7 +130,7 @@ and make sure that the 'Custom Post-Processing' option is checked.
 
 Then add as 'command':
 ```console
-curl -G -v "http://<your syncharr address>:6766/sync-request" --data-urlencode "sub={{subtitles}}" --data-urlencode "media={{episode}}" --data-urlencode "synchedSub={{subtitles}}"
+curl -G -v "http://<your syncharr address>:6766/sync-request" --data-urlencode sub={{subtitles}} --data-urlencode media={{episode}} --data-urlencode synchedSub={{subtitles}}
 ```
 
 Make sure to replace `<your syncharr address>` by the actual syncharr address.
